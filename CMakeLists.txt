@@ -49,6 +49,7 @@ set(SOURCE_FILES
 
 set(INCLUDE_DIR include)
 set(INCLUDE_FILES
+	"${INCLUDE_DIR}/${PROJECT_NAME}/entity.hpp"
 	"${INCLUDE_DIR}/${PROJECT_NAME}/bfho.hpp"
 )
 

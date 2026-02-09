@@ -62,64 +62,140 @@ must be added past the header of entities.cfg
 layout of included standard entities
 
 
-```c
-typedef struct entity_entry_s
+```cpp
+struct ENTITY
 {
-	entity_type_t type;
-	const char*   name;
-} entity_entry_t;
+	enum TYPE : u8
+	{
+		/* unknown */
+		UNKNOWN = 0,
+		UNKNOWN_SHIELD_ITEM,
+		UNKNOWN_ITEM,
 
-entity_entry_t entities->entries[ENTITY_TYPE_COUNT][ENTITY_SUBTYPE_COUNT] =
+		/* shield */
+		EXTRA_SHIELD,
+		SHIELD_FULL,
+		DOUBLE_SHIELD,
+
+		/* ammo */
+		EXTRA_AMMO,
+		AMMO_FULL,
+		DOUBLE_AMMO,
+
+		/* fuel */
+		EXTRA_FUEL,
+		FUEL_FULL,
+		DOUBLE_FUEL,
+
+		/* item upgrades */
+		MINIGUN_UPGRADE,
+		MISSILE_UPGRADE,
+		BOOSTER_UPGRADE,
+
+		/* walls */
+		WALL_SEGMENT,
+
+		/* waypoints */
+		WAYPOINT_FUEL,
+		WAYPOINT_AMMO,
+		WAYPOINT_SHIELD,
+		WAYPOINT_SPECIAL1,
+		WAYPOINT_SPECIAL2,
+		WAYPOINT_SPECIAL3,
+		WAYPOINT_FAST,
+		WAYPOINT_SLOW,
+		WAYPOINT_SHORTCUT,
+
+		/* recovery */
+		RECOVERY_TRUCK,
+
+		/* checkpoint steam */
+		STEAM_STRONG,
+		STEAM_LIGHT,
+		BARREL,
+		CONE,
+		CHECKPOINT,
+
+		/* morph */
+		MORPH_SOURCE1,
+		MORPH_SOURCE2,
+		MORPH_ONCE,
+		MORPH_PERMANENT,
+
+		/* triggers */
+		TRIGGER_CRAFT,
+		TRIGGER_TIMED,
+		TRIGGER_ROCKET,
+
+		/* damage */
+		DAMAGE_CRAFT,
+
+		/* explosions */
+		EXPLOSION,
+		EXPLOSION_PARTICLES,
+
+		/* sizes */
+		TYPE_SIZE,
+		TYPE_MAX = UINT8_MAX,
+	};
+    struct ENTRY
+    {
+        enum TYPE type;
+        std::string name;
+    };
+};
+
+ENTITY::ENTRY entities->entries[ENTITY::TYPE_COUNT][ENTITY::SUBTYPE_COUNT] =
 {
-	{ ENTITY_UNKNOWN,                        "Unknown" },
+	{ ENTITY::UNKNOWN,                        "Unknown"             },
 
-	[ 1][ 5] = { ENTITY_CHECKPOINT,          "Checkpoint" },
+	[ 1][ 5] = { ENTITY::CHECKPOINT,          "Checkpoint"          },
 
-	[ 2][ 1] = { ENTITY_EXPLOSION_PARTICLES, "Explosion Particles" },
-	[ 2][ 2] = { ENTITY_DAMAGE_CRAFT,        "Damage Craft" },
-	[ 2][ 3] = { ENTITY_EXPLOSION,           "Explosion" },	
-	[ 2][ 5] = { ENTITY_STEAM_STRONG,        "Steam Strong" },
-	[ 2][ 7] = { ENTITY_MORPH_SOURCE2,       "Morph Source2" },
-	[ 2][ 8] = { ENTITY_STEAM_LIGHT,         "Steam Light" },
-	[ 2][ 9] = { ENTITY_MORPH_SOURCE1,       "Morph Source1" },
-	[ 2][16] = { ENTITY_MORPH_ONCE,          "Morph Once" },
-	[ 2][23] = { ENTITY_MORPH_PERMANENT,     "Morph Permanent" },
+	[ 2][ 1] = { ENTITY::EXPLOSION_PARTICLES, "Explosion Particles" },
+	[ 2][ 2] = { ENTITY::DAMAGE_CRAFT,        "Damage Craft"        },
+	[ 2][ 3] = { ENTITY::EXPLOSION,           "Explosion"           },	
+	[ 2][ 5] = { ENTITY::STEAM_STRONG,        "Steam Strong"        },
+	[ 2][ 7] = { ENTITY::MORPH_SOURCE2,       "Morph Source2"       },
+	[ 2][ 8] = { ENTITY::STEAM_LIGHT,         "Steam Light"         },
+	[ 2][ 9] = { ENTITY::MORPH_SOURCE1,       "Morph Source1"       },
+	[ 2][16] = { ENTITY::MORPH_ONCE,          "Morph Once"          },
+	[ 2][23] = { ENTITY::MORPH_PERMANENT,     "Morph Permanent"     },
 
-	[ 3][ 3] = { ENTITY_BARREL,              "Entity Barrel" },
-	[ 3][ 6] = { ENTITY_CONE,                "Entity Cone" },
+	[ 3][ 3] = { ENTITY::BARREL,              "Entity Barrel"       },
+	[ 3][ 6] = { ENTITY::CONE,                "Entity Cone"         },
 
-	[ 5][ 0] = { ENTITY_UNKNOWN_SHIELD_ITEM, "Unknown Shield" },
-	[ 5][ 1] = { ENTITY_UNKNOWN_ITEM,        "Unknown Item" },
+	[ 5][ 0] = { ENTITY::UNKNOWN_SHIELD_ITEM, "Unknown Shield"      },
+	[ 5][ 1] = { ENTITY::UNKNOWN_ITEM,        "Unknown Item"        },
 
-	[ 5][ 2] = { ENTITY_EXTRA_SHIELD,        "Extra Shield" },
-	[ 5][ 3] = { ENTITY_SHIELD_FULL,         "Shield Full" },
-	[ 5][ 4] = { ENTITY_DOUBLE_SHIELD,       "Double Shield" },
-	[ 5][ 5] = { ENTITY_EXTRA_AMMO,          "Extra Ammo" },
-	[ 5][ 6] = { ENTITY_AMMO_FULL,           "Ammo Full" },
-	[ 5][ 7] = { ENTITY_DOUBLE_AMMO,         "Double Ammo" },
-	[ 5][ 8] = { ENTITY_EXTRA_FUEL,          "Extra Fuel" },
-	[ 5][ 9] = { ENTITY_FUEL_FULL,           "Fuel Full" },
-	[ 5][10] = { ENTITY_DOUBLE_FUEL,         "Double Fuel" },
-	[ 5][11] = { ENTITY_MINIGUN_UPGRADE,     "Minigun Upgrade" },
-	[ 5][12] = { ENTITY_MISSILE_UPGRADE,     "Missile Upgrade" },
-	[ 5][13] = { ENTITY_BOOSTER_UPGRADE,     "Booster Upgrade" },
+	[ 5][ 2] = { ENTITY::EXTRA_SHIELD,        "Extra Shield"        },
+	[ 5][ 3] = { ENTITY::SHIELD_FULL,         "Shield Full"         },
+	[ 5][ 4] = { ENTITY::DOUBLE_SHIELD,       "Double Shield"       },
+	[ 5][ 5] = { ENTITY::EXTRA_AMMO,          "Extra Ammo"          },
+	[ 5][ 6] = { ENTITY::AMMO_FULL,           "Ammo Full"           },
+	[ 5][ 7] = { ENTITY::DOUBLE_AMMO,         "Double Ammo"         },
+	[ 5][ 8] = { ENTITY::EXTRA_FUEL,          "Extra Fuel"          },
+	[ 5][ 9] = { ENTITY::FUEL_FULL,           "Fuel Full"           },
+	[ 5][10] = { ENTITY::DOUBLE_FUEL,         "Double Fuel"         },
+	[ 5][11] = { ENTITY::MINIGUN_UPGRADE,     "Minigun Upgrade"     },
+	[ 5][12] = { ENTITY::MISSILE_UPGRADE,     "Missile Upgrade"     },
+	[ 5][13] = { ENTITY::BOOSTER_UPGRADE,     "Booster Upgrade"     },
 
-	[ 8][ 0] = { ENTITY_TRIGGER_CRAFT,       "Trigger Craft" },
-	[ 8][ 1] = { ENTITY_TRIGGER_TIMED,       "Trigger Timed" },
-	[ 8][ 3] = { ENTITY_TRIGGER_ROCKET,      "Trigger Rocket" },
+	[ 8][ 0] = { ENTITY::TRIGGER_CRAFT,       "Trigger Craft"       },
+	[ 8][ 1] = { ENTITY::TRIGGER_TIMED,       "Trigger Timed"       },
+	[ 8][ 3] = { ENTITY::TRIGGER_ROCKET,      "Trigger Rocket"      },
 
-	[ 9][ 0] = { ENTITY_WALL_SEGMENT,        "Wall Segment" },
+	[ 9][ 0] = { ENTITY::WALL_SEGMENT,        "Wall Segment"        },
 
-	[ 9][ 1] = { ENTITY_WAYPOINT_SLOW,       "Waypoint Slow" },
-	[ 9][ 2] = { ENTITY_WAYPOINT_FUEL,       "Waypoint Fuel" },
-	[ 9][ 3] = { ENTITY_WAYPOINT_AMMO,       "Waypoint Ammo" },
-	[ 9][ 4] = { ENTITY_WAYPOINT_SHIELD,     "Waypoint Shield" },
-	[ 9][ 6] = { ENTITY_WAYPOINT_SHORTCUT,   "Waypoint Shortcut" },
-	[ 9][ 7] = { ENTITY_WAYPOINT_SPECIAL1,   "Waypoint Special1" },
-	[ 9][ 8] = { ENTITY_WAYPOINT_SPECIAL2,   "Waypoint Special2" },
-	[ 9][ 9] = { ENTITY_WAYPOINT_FAST,       "Waypoint Fast" },
-	[ 9][10] = { ENTITY_WAYPOINT_SPECIAL3,   "Waypoint Special3" },
+	[ 9][ 1] = { ENTITY::WAYPOINT_SLOW,       "Waypoint Slow"       },
+	[ 9][ 2] = { ENTITY::WAYPOINT_FUEL,       "Waypoint Fuel"       },
+	[ 9][ 3] = { ENTITY::WAYPOINT_AMMO,       "Waypoint Ammo"       },
+	[ 9][ 4] = { ENTITY::WAYPOINT_SHIELD,     "Waypoint Shield"     },
+	[ 9][ 6] = { ENTITY::WAYPOINT_SHORTCUT,   "Waypoint Shortcut"   },
+	[ 9][ 7] = { ENTITY::WAYPOINT_SPECIAL1,   "Waypoint Special1"   },
+	[ 9][ 8] = { ENTITY::WAYPOINT_SPECIAL2,   "Waypoint Special2"   },
+	[ 9][ 9] = { ENTITY::WAYPOINT_FAST,       "Waypoint Fast"       },
+	[ 9][10] = { ENTITY::WAYPOINT_SPECIAL3,   "Waypoint Special3"   },
 
-	[10][ 9] = { ENTITY_RECOVERY_TRUCK,      "Recovery Truck" },
+	[10][ 9] = { ENTITY::RECOVERY_TRUCK,      "Recovery Truck"      },
 };
 ```

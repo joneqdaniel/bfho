@@ -1,123 +1,119 @@
-#ifndef _ENTITY_H
-#define _ENTITY_H
-
-#include <system_types.h>
+#pragma once
 
 #define ENTITIES_COUNT 4000
 
-typedef struct entity_s
+struct ENTITY
 {
+	enum class TYPE : u8
+	{
+		/* unknown */
+		UNKNOWN = 0,
+		UNKNOWN_SHIELD_ITEM,
+		UNKNOWN_ITEM,
+
+		/* shield */
+		EXTRA_SHIELD,
+		SHIELD_FULL,
+		DOUBLE_SHIELD,
+
+		/* ammo */
+		EXTRA_AMMO,
+		AMMO_FULL,
+		DOUBLE_AMMO,
+
+		/* fuel */
+		EXTRA_FUEL,
+		FUEL_FULL,
+		DOUBLE_FUEL,
+
+		/* item upgrades */
+		MINIGUN_UPGRADE,
+		MISSILE_UPGRADE,
+		BOOSTER_UPGRADE,
+
+		/* walls */
+		WALL_SEGMENT,
+
+		/* waypoints */
+		WAYPOINT_FUEL,
+		WAYPOINT_AMMO,
+		WAYPOINT_SHIELD,
+		WAYPOINT_SPECIAL1,
+		WAYPOINT_SPECIAL2,
+		WAYPOINT_SPECIAL3,
+		WAYPOINT_FAST,
+		WAYPOINT_SLOW,
+		WAYPOINT_SHORTCUT,
+
+		/* recovery */
+		RECOVERY_TRUCK,
+
+		/* checkpoint steam */
+		STEAM_STRONG,
+		STEAM_LIGHT,
+		BARREL,
+		CONE,
+		CHECKPOINT,
+
+		/* morph */
+		MORPH_SOURCE1,
+		MORPH_SOURCE2,
+		MORPH_ONCE,
+		MORPH_PERMANENT,
+
+		/* triggers */
+		TRIGGER_CRAFT,
+		TRIGGER_TIMED,
+		TRIGGER_ROCKET,
+
+		/* damage */
+		DAMAGE_CRAFT,
+
+		/* explosions */
+		EXPLOSION,
+		EXPLOSION_PARTICLES,
+
+		/* sizes */
+		TYPE_SIZE,
+		TYPE_MAX = UINT8_MAX,
+	};
+	struct ENTRY
+	{
+		enum TYPE   type;
+		std::string name;
+	};
+
 	union {
-		uint8_t data[24];
+		u8 data[24];
 		struct{
 			union {
 				struct {
-					uint8_t type;
-					uint8_t subtype;
+					u8 type;
+					u8 subtype;
 				};
-				uint8_t type_field;
+				u8 type_field;
 			};
-			int16_t group;
-			int16_t target_group;
-			uint8_t unknown[6];
-			int16_t next_id;
-			int16_t value;
-			fixed16_t x;
-			fixed16_t z;
-			fixed16_t offset_x;
-			fixed16_t offset_y;
+			i16 group;
+			i16 target_group;
+			u8 unknown[6];
+			i16 next_id;
+			i16 value;
+			fxd x;
+			fxd z;
+			fxd offset_x;
+			fxd offset_y;
 		};
 	};
-} entity_t;
 
-typedef enum entity_type_e
-{
-	/* unknown */
-	ENTITY_UNKNOWN = 0,
-	ENTITY_UNKNOWN_SHIELD_ITEM,
-	ENTITY_UNKNOWN_ITEM,
+	struct table
+	{
+		size_t TYPE_SIZE;
+		size_t SUBTYPE_SIZE;
+		std::vector<std::string>   names;
+		std::vector<ENTRY*     > entries;
+	};
+};
 
-	/* shield */
-	ENTITY_EXTRA_SHIELD,
-	ENTITY_SHIELD_FULL,
-	ENTITY_DOUBLE_SHIELD,
-
-	/* ammo */
-	ENTITY_EXTRA_AMMO,
-	ENTITY_AMMO_FULL,
-	ENTITY_DOUBLE_AMMO,
-
-	/* fuel */
-	ENTITY_EXTRA_FUEL,
-	ENTITY_FUEL_FULL,
-	ENTITY_DOUBLE_FUEL,
-
-	/* item upgrades */
-	ENTITY_MINIGUN_UPGRADE,
-	ENTITY_MISSILE_UPGRADE,
-	ENTITY_BOOSTER_UPGRADE,
-
-	/* walls */
-	ENTITY_WALL_SEGMENT,
-
-	/* waypoints */
-	ENTITY_WAYPOINT_FUEL,
-	ENTITY_WAYPOINT_AMMO,
-	ENTITY_WAYPOINT_SHIELD,
-	ENTITY_WAYPOINT_SPECIAL1,
-	ENTITY_WAYPOINT_SPECIAL2,
-	ENTITY_WAYPOINT_SPECIAL3,
-	ENTITY_WAYPOINT_FAST,
-	ENTITY_WAYPOINT_SLOW,
-	ENTITY_WAYPOINT_SHORTCUT,
-
-	/* recovery */
-	ENTITY_RECOVERY_TRUCK,
-
-	/* checkpoint steam */
-	ENTITY_STEAM_STRONG,
-	ENTITY_STEAM_LIGHT,
-	ENTITY_BARREL,
-	ENTITY_CONE,
-	ENTITY_CHECKPOINT,
-
-	/* morph */
-	ENTITY_MORPH_SOURCE1,
-	ENTITY_MORPH_SOURCE2,
-	ENTITY_MORPH_ONCE,
-	ENTITY_MORPH_PERMANENT,
-
-	/* triggers */
-	ENTITY_TRIGGER_CRAFT,
-	ENTITY_TRIGGER_TIMED,
-	ENTITY_TRIGGER_ROCKET,
-
-	/* damage */
-	ENTITY_DAMAGE_CRAFT,
-
-	/* explosions */
-	ENTITY_EXPLOSION,
-	ENTITY_EXPLOSION_PARTICLES,
-
-	/* sizes */
-	ENTITY_TYPE_SIZE,
-	ENTITY_TYPE_MAX = UINT8_MAX,
-} entity_type_t;
-
-typedef struct entity_entry_s
-{
-	entity_type_t type;
-	const char*   name;
-} entity_entry_t;
-
-typedef struct entity_type_table_s
-{
-	size_t TYPE_SIZE;
-	size_t SUBTYPE_SIZE;
-	size_t num_entries;
-	char** names;
-	entity_entry_t** entries;
-} entity_type_table_t;
 
 extern entity_type_table_t* entity_type_table;
 
