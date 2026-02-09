@@ -2,8 +2,7 @@
 
 Bullfrog [Hi-Octane](https://en.wikipedia.org/wiki/Hi-Octane) C++ library
 
-## Entities
-layout of included standard entities
+## Entity layout
 ```cpp
 ENTITY::ENTRY entities->entries[ENTITY::TYPE_COUNT][ENTITY::SUBTYPE_COUNT] =
 {
