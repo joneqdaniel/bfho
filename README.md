@@ -2,61 +2,8 @@
 
 Bullfrog [Hi-Octane](https://en.wikipedia.org/wiki/Hi-Octane) C++ library
 
-- [HiOctaneTools](https://github.com/movAX13h/HiOctaneTools)
-- [HiOctaneBullfrog](https://github.com/aybe/HiOctaneBullfrog)
-- [moddingwiki](https://moddingwiki.shikadi.net/wiki/Hi_Octane)
-- [Debug symbols from the PSX release](https://github.com/RetroReversing/retroReversing/blob/779ab5297c1e5501a4e563e801dfd0724acc1536/pages/ps1/PS1Symbols.md?plain=1#L59)
-
-# Building
-
-```sh
-cmake .
-make
-make install
-```
-
-# Status
-
-new map list format using simple checksum 
-with additional comment line as name
-
-create maps.cfg:
-
-```sh
-cd data && rhash -C -simple maps/*
-```
-
-add map name as a comment beginning with:
-
-```sh
-; <name>
-```
-
-after the line following the checksum and file
-
-
-required header information to create entities.cfg:
-
-```sh
-<hexadecimal type size> <hexadecimal subtype size>
-; types count / subtypes count
-<hexadecimal type> <hexadecimal subtype> <decimal enum int id>
-; Unknown Zero
-```
-
-for every entity
-
-```sh
-<hexadecimal type> <hexadecimal subtype> <decimal enum int id>
-; <entity name string>
-```
-
-must be added past the header of entities.cfg
-
-
+## Entities
 layout of included standard entities
-
-
 ```cpp
 ENTITY::ENTRY entities->entries[ENTITY::TYPE_COUNT][ENTITY::SUBTYPE_COUNT] =
 {
@@ -111,4 +58,51 @@ ENTITY::ENTRY entities->entries[ENTITY::TYPE_COUNT][ENTITY::SUBTYPE_COUNT] =
 
 	[10][ 9] = { ENTITY::RECOVERY_TRUCK,      "Recovery Truck"      },
 };
+
 ```
+## Usage
+
+new map list format using simple checksum 
+with additional comment line as name
+
+create maps.cfg:
+
+```sh
+cd data && rhash -C -simple maps/*
+```
+
+add map name as a comment beginning with:
+
+```sh
+; <name>
+```
+
+after the line following the checksum and file
+
+
+required header information to create entities.cfg:
+
+```sh
+<hexadecimal type size> <hexadecimal subtype size>
+; types count / subtypes count
+<hexadecimal type> <hexadecimal subtype> <decimal enum int id>
+; Unknown Zero
+```
+
+for every entity
+
+```sh
+<hexadecimal type> <hexadecimal subtype> <decimal enum int id>
+; <entity name string>
+```
+
+must be added past the header of entities.cfg
+
+
+
+## Links
+- [HiOctaneTools](https://github.com/movAX13h/HiOctaneTools)
+- [HiOctaneBullfrog](https://github.com/aybe/HiOctaneBullfrog)
+- [moddingwiki](https://moddingwiki.shikadi.net/wiki/Hi_Octane)
+- [Debug symbols from the PSX release](https://github.com/RetroReversing/retroReversing/blob/779ab5297c1e5501a4e563e801dfd0724acc1536/pages/ps1/PS1Symbols.md?plain=1#L59)
+
