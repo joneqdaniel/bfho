@@ -65,40 +65,26 @@ ENTITY::ENTRY entities->entries[ENTITY::TYPE_COUNT][ENTITY::SUBTYPE_COUNT] =
 new map list format using simple checksum 
 with additional comment line as name
 
-create maps.cfg:
-
+### maps.cfg
 ```sh
 cd data && rhash -C -simple maps/*
 ```
+add map name as a comment beginning with ```; <name>``` after the line following the checksum and file
 
-add map name as a comment beginning with:
-
-```sh
-; <name>
-```
-
-after the line following the checksum and file
-
-
-required header information to create entities.cfg:
-
+### entities.cfg
 ```sh
 <hexadecimal type size> <hexadecimal subtype size>
 ; types count / subtypes count
 <hexadecimal type> <hexadecimal subtype> <decimal enum int id>
 ; Unknown Zero
 ```
-
 for every entity
 
 ```sh
 <hexadecimal type> <hexadecimal subtype> <decimal enum int id>
 ; <entity name string>
 ```
-
-must be added past the header of entities.cfg
-
-
+must be added past the header
 
 ## Links
 - [HiOctaneTools](https://github.com/movAX13h/HiOctaneTools)
