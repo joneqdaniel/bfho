@@ -1,9 +1,0 @@
-[submodule "external/fast_obj"]
-	path = external/fast_obj
-	url = http://github.com/thisistherk/fast_obj
-[submodule "external/obj"]
-	path = external/obj
-	url = http://github.com/rlk/obj
-[submodule "external/log"]
-	path = external/log
-	url = http://github.com/jopadan/log

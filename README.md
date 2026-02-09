@@ -1,6 +1,6 @@
 # bfho
-[Hi-Octane](https://en.wikipedia.org/wiki/Hi-Octane) port in C based on
 
+Bullfrog [Hi-Octane](https://en.wikipedia.org/wiki/Hi-Octane) C++ library
 
 - [HiOctaneTools](https://github.com/movAX13h/HiOctaneTools)
 - [HiOctaneBullfrog](https://github.com/aybe/HiOctaneBullfrog)

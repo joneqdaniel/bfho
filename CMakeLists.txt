@@ -1,77 +1,84 @@
-cmake_minimum_required(VERSION 3.0)
-project(hioctane LANGUAGES C)
+cmake_minimum_required(VERSION 3.15)
+project(bfho VERSION 1.0 LANGUAGES CXX)
 
-set(PROJECT_VERSION 1.0)
-set(PROJECT_DESCRIPTION "Hi-Octane C port")
+set(PROJECT_DESCRIPTION "Bullfrog Hi-Octane C++ library")
+
+if( NOT CMAKE_BUILD_TYPE )
+        set( CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE )
+endif()
+if( NOT CMAKE_OPTIMIZATION_LEVEL )
+	set( CMAKE_OPTIMIZATION_LEVEL 3 CACHE STRING "Choose the level of optimization." FORCE )
+endif()
 
 include(GNUInstallDirs)
 include(FindPkgConfig)
 
+set( CMAKE_CXX_STANDARD 23 )
+set( CMAKE_CXX_STANDARD_REQUIRED ON )
+set( CMAKE_CXX_EXTENSIONS ON)
+
+if( CMAKE_BUILD_TYPE EQUAL Debug )
+	add_compile_options(-g)
+endif()
+
+if( CMAKE_GENERATOR_PLATFORM STREQUAL "x64" OR CMAKE_GENERATOR_PLATFORM STREQUAL "x86_64" OR CMAKE_GENERATOR_PLATFORM STREQUAL "AMD64" )
+	add_compile_options(-mfpmath=sse)
+endif()
+
+add_compile_options(-march=native)
+add_compile_options(-O${CMAKE_OPTIMIZATION_LEVEL})
+add_compile_options(-fopenmp-simd)
+add_compile_options(-ftree-vectorize)
+add_compile_options(-Wno-gnu-alignof-expression)
+add_compile_options(-D_FILE_OFFSET_BITS=64)
+add_compile_options(-fdata-sections)
+add_compile_options(-fpermissive)
+add_compile_options(-ffunction-sections)
+add_compile_options(-Wno-array-bounds)
+add_compile_options(-Wno-unused-parameter)
+add_compile_options(-Wno-pedantic)
+add_compile_options(-Wno-narrowing)
+add_compile_options(-Wno-int-conversion)
+add_link_options(-Wl,--gc-sections)
+add_link_options(-Wl,--print-gc-sections)
+add_link_options(-Wl,-s)
+
+
 set(SOURCE_FILES
-	src/res/map_entry.c
-	src/res/entity.c
-	src/res/block.c
-	src/res/column.c
-	src/res/level_file.c
-	src/res/model.c
-	src/system_types.c
-	external/log/log.c
-	external/obj/obj.c
-	external/crc/crc.c
 )
 
+set(INCLUDE_DIR include)
 set(INCLUDE_FILES
-	src/system_types.h
-	src/res/entity.h
-	src/res/map_entry.h
-	src/res/block.h
-	src/res/column.h
-	src/res/level_file.h
-	src/res/model.h
-	external/log/log.h
-	external/obj/obj.h
-	external/crc/crc.h
+	"${INCLUDE_DIR}/${PROJECT_NAME}/bfho.hpp"
 )
 
 set(EXAMPLE_SOURCE_FILES
 	src/main.c
 )
 
-pkg_search_module(ZIP REQUIRED libzip)
-pkg_search_module(GLEW REQUIRED glew)
+add_library(${PROJECT_NAME} INTERFACE)
 
-add_executable( ${PROJECT_NAME} ${EXAMPLE_SOURCE_FILES} ${SOURCE_FILES}
-	${INCLUDE_FILES}  ${ZIP_INCLUDE} ${GLEW_INCLUDE})
-
-target_compile_options(${PROJECT_NAME} PUBLIC ${ZIP_CFLAGS})
-target_include_directories(${PROJECT_NAME} PUBLIC ${ZIP_INCLUDEDIR} ${GLEW_INCLUDEDIR}
-			$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-			$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external/obj/>
-			$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external/log/>
-			$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external/crc/>
-			$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/lib${PROJECT_NAME}>
-			)
-target_link_libraries( ${PROJECT_NAME} PUBLIC ${ZIP_LIBRARIES} ${GLEW_LIBRARIES} -lm )
+target_include_directories(${PROJECT_NAME} INTERFACE
+	PUBLIC_HEADER $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/>
+)
 
 
 
 set(install_prefix "${CMAKE_INSTALL_PREFIX}")
 set(install_libdir "${CMAKE_INSTALL_LIBDIR}")
 set(install_includedir "${CMAKE_INSTALL_INCLUDEDIR}")
-
 configure_file(lib${PROJECT_NAME}.pc.in ${PROJECT_BINARY_DIR}/lib${PROJECT_NAME}.pc @ONLY)
-
 set(ENV{PKG_CONFIG_PATH} "${PROJECT_BINARY_DIR}:$ENV{PKG_CONFIG_PATH}")
 
-install(TARGETS hioctane EXPORT ${PROJECT_NAME}Config
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Config
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	PUBLIC_HEADER DESTINATION
-	${CMAKE_INSTALL_INCLUDEDIR}/lib${PROJECT_NAME}
+	${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 	)
 
-install(FILES ${INCLUDE_FILES} DESTINATION
-	${CMAKE_INSTALL_INCLUDEDIR}/lib${PROJECT_NAME}/)
+install(FILES ${PROJECT_SOURCE_DIR}/${INCLUDE_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME} COMPONENT headers)
 
 install(FILES lib${PROJECT_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/)
