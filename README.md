@@ -147,7 +147,7 @@ struct ENTITY
 
 ENTITY::ENTRY entities->entries[ENTITY::TYPE_COUNT][ENTITY::SUBTYPE_COUNT] =
 {
-	{ ENTITY::UNKNOWN,                        "Unknown"             },
+	           { ENTITY::UNKNOWN,             "Unknown"             },
 
 	[ 1][ 5] = { ENTITY::CHECKPOINT,          "Checkpoint"          },
 
